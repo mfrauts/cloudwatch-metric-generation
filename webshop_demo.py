@@ -30,13 +30,16 @@ while True:
     total_tickets_sold += tickets_sold_increment
     total_furka_tickets_sold += furka_tickets_sold_increment
     total_mattherhorn_gotthard_pass_2 += random.randint(1, 3)
-    total_mattherhorn_gotthard_pass_3 += random.randint(1, 2)  # Ensure at least 1 increment
-    total_mattherhorn_gotthard_pass_5 += random.randint(1, 1)  # Ensure at least 1 increment
+    total_mattherhorn_gotthard_pass_3 += random.randint(1, 2)
+    total_mattherhorn_gotthard_pass_5 += random.randint(1, 1)
 
     current_train_capacity = random.randint(40, 80)
 
     # Parkplatzauslastung Täsch basierend auf current_train_capacity
     parking_capacity_tasch = current_train_capacity * 0.8  # Beispiel: 80% der Zugkapazität
+
+    # Systemauslastung basierend auf current_train_capacity
+    systemauslastung = current_train_capacity * 0.9  # Beispiel: 90% der Zugkapazität
 
     # Metriken an CloudWatch senden
     cloudwatch.put_metric_data(
@@ -50,7 +53,8 @@ while True:
             {'MetricName': 'FurkaTicketsSold', 'Value': total_furka_tickets_sold, 'Unit': 'Count'},
             {'MetricName': 'MatterhornGotthardPass2', 'Value': total_mattherhorn_gotthard_pass_2, 'Unit': 'Count'},
             {'MetricName': 'MatterhornGotthardPass3', 'Value': total_mattherhorn_gotthard_pass_3, 'Unit': 'Count'},
-            {'MetricName': 'MatterhornGotthardPass5', 'Value': total_mattherhorn_gotthard_pass_5, 'Unit': 'Count'}
+            {'MetricName': 'MatterhornGotthardPass5', 'Value': total_mattherhorn_gotthard_pass_5, 'Unit': 'Count'},
+            {'MetricName': 'Systemauslastung', 'Value': systemauslastung, 'Unit': 'Percent'}  # Systemauslastung in Prozent
         ]
     )
 
@@ -61,7 +65,8 @@ while True:
           f"FurkaTickets={total_furka_tickets_sold}, "
           f"MatterhornPass2={total_mattherhorn_gotthard_pass_2}, "
           f"MatterhornPass3={total_mattherhorn_gotthard_pass_3}, "
-          f"MatterhornPass5={total_mattherhorn_gotthard_pass_5}")
+          f"MatterhornPass5={total_mattherhorn_gotthard_pass_5}, "
+          f"Systemauslastung={systemauslastung}%")
 
     # Alle 60 Sekunden neue Werte senden
-    time.sleep(2)
+    time.sleep(5)
