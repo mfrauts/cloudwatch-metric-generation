@@ -15,6 +15,7 @@ total_furka_tickets_sold = 0
 total_mattherhorn_gotthard_pass_2 = 0
 total_mattherhorn_gotthard_pass_3 = 0
 total_mattherhorn_gotthard_pass_5 = 0
+error_count = 0  # Initialisierung des Error Count
 
 # Manuell festgelegter Wert für AbandonedCarts
 fixed_abandoned_carts = 42  # Beispielwert, den du nach Bedarf ändern kannst
@@ -26,12 +27,14 @@ while True:
     page_views = random.randint(50, 600)
     tickets_sold_increment = random.randint(0, 3)
     furka_tickets_sold_increment = random.randint(1, 2)
+    error_count_increment = random.randint(0, 1)  # Zufällige Fehleranzahl
 
     total_tickets_sold += tickets_sold_increment
     total_furka_tickets_sold += furka_tickets_sold_increment
     total_mattherhorn_gotthard_pass_2 += random.randint(1, 3)
     total_mattherhorn_gotthard_pass_3 += random.randint(1, 2)
     total_mattherhorn_gotthard_pass_5 += random.randint(1, 1)
+    error_count += error_count_increment
 
     current_train_capacity = random.randint(40, 80)
 
@@ -54,7 +57,8 @@ while True:
             {'MetricName': 'MatterhornGotthardPass2', 'Value': total_mattherhorn_gotthard_pass_2, 'Unit': 'Count'},
             {'MetricName': 'MatterhornGotthardPass3', 'Value': total_mattherhorn_gotthard_pass_3, 'Unit': 'Count'},
             {'MetricName': 'MatterhornGotthardPass5', 'Value': total_mattherhorn_gotthard_pass_5, 'Unit': 'Count'},
-            {'MetricName': 'Systemauslastung', 'Value': systemauslastung, 'Unit': 'Percent'}  # Systemauslastung in Prozent
+            {'MetricName': 'Systemauslastung', 'Value': systemauslastung, 'Unit': 'Percent'},
+            {'MetricName': 'ErrorCount', 'Value': error_count, 'Unit': 'Count'}  # Error Count
         ]
     )
 
@@ -66,7 +70,8 @@ while True:
           f"MatterhornPass2={total_mattherhorn_gotthard_pass_2}, "
           f"MatterhornPass3={total_mattherhorn_gotthard_pass_3}, "
           f"MatterhornPass5={total_mattherhorn_gotthard_pass_5}, "
-          f"Systemauslastung={systemauslastung}%")
+          f"Systemauslastung={systemauslastung}%, "
+          f"ErrorCount={error_count}")
 
     # Alle 60 Sekunden neue Werte senden
     time.sleep(5)
